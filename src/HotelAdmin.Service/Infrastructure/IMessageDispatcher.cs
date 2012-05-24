@@ -6,5 +6,6 @@ namespace HotelAdmin.Service.Infrastructure
     public interface IMessageDispatcher
     {
         void Dispatch<T>(T message, IDictionary<string, object> metaData = null) where T : IMessage;
+        void DispatchNonGeneric(IMessage message, IDictionary<string, object> metaData = null);
     }
 }

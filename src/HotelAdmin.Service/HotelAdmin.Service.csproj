@@ -57,6 +57,8 @@
     <Compile Include="CommandHandlers\SetHotelFactsCommandHandler.cs" />
     <Compile Include="CommandHandlers\UpdateFactTypeCommandHandler.cs" />
     <Compile Include="CommandHandlers\UpdateHotelCommandHandler.cs" />
+    <Compile Include="EventHandlers\FactTypeEventHandlers.cs" />
+    <Compile Include="EventHandlers\HotelEventHandlers.cs" />
     <Compile Include="FactTypeModel.cs" />
     <Compile Include="FactTypeService.cs" />
     <Compile Include="HotelModel.cs" />
@@ -89,6 +91,7 @@
   <ItemGroup>
     <Content Include="App_Readme\EventStore.license.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

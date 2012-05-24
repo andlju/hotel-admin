@@ -10,14 +10,12 @@ namespace HotelAdmin.Service.CommandHandlers
 {
     public class DeleteHotelCommandHandler : IMessageHandler<DeleteHotelCommand>
     {
-        private readonly IObjectContext _objectContext;
         private readonly IHotelRepository _hotelRepository;
         private readonly IIdentityMapper _identityMapper;
         private readonly IEventStorage _eventStorage;
 
-        public DeleteHotelCommandHandler(IObjectContext objectContext, IHotelRepository hotelRepository, IIdentityMapper identityMapper, IEventStorage eventStorage)
+        public DeleteHotelCommandHandler(IHotelRepository hotelRepository, IIdentityMapper identityMapper, IEventStorage eventStorage)
         {
-            _objectContext = objectContext;
             _hotelRepository = hotelRepository;
             _identityMapper = identityMapper;
             _eventStorage = eventStorage;
@@ -29,10 +27,6 @@ namespace HotelAdmin.Service.CommandHandlers
             var hotel = _hotelRepository.Get(h => h.Id == modelId);
             if (hotel == null)
                 throw new InvalidOperationException(string.Format("No hotel found with id {0}", modelId));
-
-            _hotelRepository.Delete(hotel);
-
-            _objectContext.SaveChanges();
 
             _eventStorage.Store(new HotelDeletedEvent()
                                     {

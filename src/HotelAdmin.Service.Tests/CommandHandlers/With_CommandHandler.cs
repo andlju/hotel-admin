@@ -15,7 +15,6 @@ namespace HotelAdmin.Service.Tests.CommandHandlers
     {
         protected TRepository RepositoryFake { get; private set; }
         protected IIdentityMapper IdentityMapperFake { get; private set; }
-        protected IObjectContext ObjectContextFake { get; private set; }
         protected MockEventStorage EventStorage { get; private set; }
 
         protected Exception ThrownException { get; private set; }
@@ -23,7 +22,6 @@ namespace HotelAdmin.Service.Tests.CommandHandlers
         [TestInitialize]
         public void Initialize()
         {
-            ObjectContextFake = A.Fake<IObjectContext>();
             RepositoryFake = A.Fake<TRepository>();
             IdentityMapperFake = A.Fake<IIdentityMapper>();
             EventStorage = new MockEventStorage();

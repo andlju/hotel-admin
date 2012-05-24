@@ -10,14 +10,12 @@ namespace HotelAdmin.Service.CommandHandlers
 {
     public class UpdateHotelCommandHandler : IMessageHandler<UpdateHotelCommand>
     {
-        private readonly IObjectContext _objectContext;
         private readonly IHotelRepository _hotelRepository;
         private readonly IIdentityMapper _identityMapper;
         private readonly IEventStorage _eventStorage;
 
-        public UpdateHotelCommandHandler(IObjectContext objectContext, IHotelRepository hotelRepository, IIdentityMapper identityMapper, IEventStorage eventStorage)
+        public UpdateHotelCommandHandler(IHotelRepository hotelRepository, IIdentityMapper identityMapper, IEventStorage eventStorage)
         {
-            _objectContext = objectContext;
             _hotelRepository = hotelRepository;
             _identityMapper = identityMapper;
             _eventStorage = eventStorage;
@@ -30,12 +28,6 @@ namespace HotelAdmin.Service.CommandHandlers
             var hotel = _hotelRepository.Get(h => h.Id == modelId);
             if (hotel == null)
                 throw new InvalidOperationException(string.Format("No hotel found with id {0}", message.HotelAggregateId));
-
-            hotel.Name = message.Name;
-            hotel.Description = message.Description;
-            hotel.Image = message.ImageUrl;
-            
-            _objectContext.SaveChanges();
 
             _eventStorage.Store(new HotelUpdatedEvent()
                                     {

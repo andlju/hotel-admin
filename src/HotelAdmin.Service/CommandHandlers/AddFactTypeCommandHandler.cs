@@ -9,27 +9,15 @@ namespace HotelAdmin.Service.CommandHandlers
 {
     public class AddFactTypeCommandHandler : IMessageHandler<AddFactTypeCommand>
     {
-        private readonly IObjectContext _objectContext;
-        private readonly IFactTypeRepository _factTypeRepository;
-        private readonly IIdentityMapper _identityMapper;
         private readonly IEventStorage _eventStorage;
 
-        public AddFactTypeCommandHandler(IObjectContext objectContext, IFactTypeRepository factTypeRepository, IIdentityMapper identityMapper, IEventStorage eventStorage)
+        public AddFactTypeCommandHandler(IEventStorage eventStorage)
         {
-            _objectContext = objectContext;
-            _factTypeRepository = factTypeRepository;
-            _identityMapper = identityMapper;
             _eventStorage = eventStorage;
         }
 
         public void Handle(AddFactTypeCommand message, IDictionary<string, object> metaData)
         {
-            var factType = new FactType() {Code = message.Code, Name = message.Name};
-            _factTypeRepository.Add(factType);
-            
-            _objectContext.SaveChanges();
-
-            _identityMapper.Map<FactType>(factType.Id, message.FactTypeAggregateId);
             _eventStorage.Store(new FactTypeAddedEvent()
                                     {
                                         FactTypeAggregateId = message.FactTypeAggregateId,

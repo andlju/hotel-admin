@@ -31,7 +31,7 @@ namespace HotelAdmin.Service.Tests.CommandHandlers.UpdateHotel
             A.CallTo(() => IdentityMapperFake.GetModelId<Hotel>(_hotelAggregatedId)).Returns(_hotelId);
             A.CallTo(() => RepositoryFake.Get(null)).WithAnyArguments().Returns(_hotel);
 
-            return new UpdateHotelCommandHandler(ObjectContextFake, RepositoryFake, IdentityMapperFake, EventStorage);
+            return new UpdateHotelCommandHandler(RepositoryFake, IdentityMapperFake, EventStorage);
         }
 
         protected override UpdateHotelCommand When()
@@ -68,30 +68,5 @@ namespace HotelAdmin.Service.Tests.CommandHandlers.UpdateHotel
                 Assert.AreEqual("http://test.com/testar.jpg", e.ImageUrl);
             });
         }
-
-        [TestMethod]
-        public void Then_Hotel_Name_Is_Updated()
-        {
-            Assert.AreEqual("Testy Beach Resort", _hotel.Name);
-        }
-
-        [TestMethod]
-        public void Then_Hotel_Description_Is_Updated()
-        {
-            Assert.AreEqual("A nice resort situated right at Testy Beach", _hotel.Description);
-        }
-
-        [TestMethod]
-        public void Then_Hotel_Image_Is_Updated()
-        {
-            Assert.AreEqual("http://test.com/testar.jpg", _hotel.Image);
-        }
-
-        [TestMethod]
-        public void Then_Changes_Are_Saved()
-        {
-            A.CallTo(() => ObjectContextFake.SaveChanges()).MustHaveHappened(Repeated.Exactly.Once);
-        }
-
     }
 }

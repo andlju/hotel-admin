@@ -40,5 +40,11 @@ namespace HotelAdmin.Service.Infrastructure
                 handler.Handle(message, metaData);
             }
         }
+
+        public void DispatchNonGeneric(IMessage message, IDictionary<string, object> metaData = null)
+        {
+            var dispatchMethod = GetType().GetMethod("Dispatch").MakeGenericMethod(message.GetType());
+            dispatchMethod.Invoke(this, new object[]{ message, metaData });
+        }
     }
 }

@@ -1,8 +1,11 @@
 ﻿using System;
 using HotelAdmin.DataAccess;
+using HotelAdmin.Loader.Events;
+using HotelAdmin.Messages.Events;
 using HotelAdmin.Loader.TcneApi;
 using HotelAdmin.Service;
 using HotelAdmin.Service.CommandHandlers;
+using HotelAdmin.Service.EventHandlers;
 using HotelAdmin.Service.Infrastructure;
 using Petite;
 
@@ -20,23 +23,40 @@ namespace HotelAdmin.Loader
             var historyRep = new DummyHistoryItemRepository();
 
             var idMapRep = new IdentityMapRepository(objContext);
-            var eventStorage = new EventStoreEventStorage();
-
             var idMapper = new IdentityMapper(objContext, idMapRep);
+
+            var eventDispatcher = new MessageDispatcher();
+            var factTypeEventHandlers = new FactTypeEventHandlers(objContext, factTypeRep, idMapper);
+            var hotelEventHandlers = new HotelEventHandlers(objContext, hotelRep, idMapper);
+
+            eventDispatcher.RegisterHandler<HotelAddedEvent>(hotelEventHandlers);
+            eventDispatcher.RegisterHandler<HotelUpdatedEvent>(hotelEventHandlers);
+            eventDispatcher.RegisterHandler<HotelDeletedEvent>(hotelEventHandlers);
+            eventDispatcher.RegisterHandler<HotelFactsSetEvent>(hotelEventHandlers);
+
+            eventDispatcher.RegisterHandler<FactTypeAddedEvent>(factTypeEventHandlers);
+            eventDispatcher.RegisterHandler<FactTypeUpdatedEvent>(factTypeEventHandlers);
+
+            var eventStorage = new EventStoreEventStorage(eventDispatcher);
             
             var messageDispatcher = new MessageDispatcher();
-            messageDispatcher.RegisterHandler(new AddHotelCommandHandler(objContext, hotelRep, idMapper, eventStorage));
-            messageDispatcher.RegisterHandler(new UpdateHotelCommandHandler(objContext, hotelRep, idMapper, eventStorage));
-            messageDispatcher.RegisterHandler(new SetHotelFactsCommandHandler(objContext, hotelRep, idMapper, eventStorage));
-            messageDispatcher.RegisterHandler(new DeleteHotelCommandHandler(objContext, hotelRep, idMapper, eventStorage));
+            messageDispatcher.RegisterHandler(new AddHotelCommandHandler(hotelRep, idMapper, eventStorage));
+            messageDispatcher.RegisterHandler(new UpdateHotelCommandHandler(hotelRep, idMapper, eventStorage));
+            messageDispatcher.RegisterHandler(new SetHotelFactsCommandHandler(hotelRep, idMapper, eventStorage));
+            messageDispatcher.RegisterHandler(new DeleteHotelCommandHandler(hotelRep, idMapper, eventStorage));
 
-            messageDispatcher.RegisterHandler(new AddFactTypeCommandHandler(objContext, factTypeRep, idMapper, eventStorage));
-            messageDispatcher.RegisterHandler(new UpdateFactTypeCommandHandler(objContext, factTypeRep, idMapper, eventStorage));
+            messageDispatcher.RegisterHandler(new AddFactTypeCommandHandler(eventStorage));
+            messageDispatcher.RegisterHandler(new UpdateFactTypeCommandHandler(factTypeRep, idMapper, eventStorage));
 
             FactTypeService factTypeService = new FactTypeService(factTypeRep, messageDispatcher, idMapper);
             HotelService hotelService = new HotelService(hotelRep, historyRep, messageDispatcher, idMapper);
 
-            if (args != null && args.Length > 0 && args[0] == "world")
+            if (args == null || args.Length == 0)
+            {
+                Console.WriteLine("Usage: HotelAdmin.Loader.exe {{world|reload}} [maxItems] ");
+                return;
+            }
+            if (args[0] == "world")
             {
                 int numberOfHotels = 100;
                 if (args.Length > 1)
@@ -49,7 +69,16 @@ namespace HotelAdmin.Loader
                 return;
             }
 
+            if (args[0] == "reload")
+            {
+                EventReloader.ReloadEvents(eventStorage, eventDispatcher);
+                return;
+            }
+
+            Console.WriteLine("Unknown argument '{0}'", args[0]);
             Console.WriteLine("Usage: HotelAdmin.Loader.exe {{world}} [maxItems] ");
+            return;
+
         }
     }
 }

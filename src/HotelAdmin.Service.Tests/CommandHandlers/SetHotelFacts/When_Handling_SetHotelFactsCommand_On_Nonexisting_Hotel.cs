@@ -23,7 +23,7 @@ namespace HotelAdmin.Service.Tests.CommandHandlers.SetHotelFacts
 
             A.CallTo(() => RepositoryFake.Get(null)).WithAnyArguments().Returns(null);
 
-            return new SetHotelFactsCommandHandler(ObjectContextFake, RepositoryFake, IdentityMapperFake, EventStorage);
+            return new SetHotelFactsCommandHandler(RepositoryFake, IdentityMapperFake, EventStorage);
         }
 
         protected override SetHotelFactsCommand When()
@@ -44,12 +44,6 @@ namespace HotelAdmin.Service.Tests.CommandHandlers.SetHotelFacts
         public void Then_InvalidOperationException_Is_Thrown()
         {
             Assert.IsInstanceOfType(ThrownException, typeof(InvalidOperationException));
-        }
-
-        [TestMethod]
-        public void Then_Changes_Are_Not_Saved()
-        {
-            A.CallTo(() => ObjectContextFake.SaveChanges()).MustNotHaveHappened();
         }
     }
 }

@@ -1,8 +1,10 @@
 ﻿using HotelAdmin.DataAccess;
 using HotelAdmin.Domain;
 using HotelAdmin.Messages.Commands;
+using HotelAdmin.Messages.Events;
 using HotelAdmin.Service;
 using HotelAdmin.Service.CommandHandlers;
+using HotelAdmin.Service.EventHandlers;
 using HotelAdmin.Service.Infrastructure;
 using Nancy;
 using Nancy.Conventions;
@@ -50,6 +52,24 @@ namespace HotelAdmin.Web
                                                            return messageDispatcher;
                                                        });
 
+            container.Register<HotelEventHandlers>().AsMultiInstance();
+            container.Register<FactTypeEventHandlers>().AsMultiInstance();
+
+            container.Register<IMessageDispatcher>((c, o) =>
+                                                       {
+                                                           var eventDispatcher = new MessageDispatcher();
+
+                                                           eventDispatcher.RegisterHandler<HotelAddedEvent>(c.Resolve<HotelEventHandlers>());
+                                                           eventDispatcher.RegisterHandler<HotelUpdatedEvent>(c.Resolve<HotelEventHandlers>());
+                                                           eventDispatcher.RegisterHandler<HotelFactsSetEvent>(c.Resolve<HotelEventHandlers>());
+                                                           eventDispatcher.RegisterHandler<HotelDeletedEvent>(c.Resolve<HotelEventHandlers>());
+
+                                                           eventDispatcher.RegisterHandler<FactTypeAddedEvent>(c.Resolve<FactTypeEventHandlers>());
+                                                           eventDispatcher.RegisterHandler<FactTypeUpdatedEvent>(c.Resolve<FactTypeEventHandlers>());
+
+                                                           return eventDispatcher;
+                                                       }, "EventDispatcher");
+
             // CommandHandlers
             container.Register<IMessageHandler<AddHotelCommand>, AddHotelCommandHandler>().AsMultiInstance();
             container.Register<IMessageHandler<UpdateHotelCommand>, UpdateHotelCommandHandler>().AsMultiInstance();
@@ -63,7 +83,12 @@ namespace HotelAdmin.Web
             container.Register<IIdentityMapper, IdentityMapper>().AsMultiInstance();
             container.Register<IHotelService, HotelService>().AsMultiInstance();
             container.Register<IFactTypeService, FactTypeService>().AsMultiInstance();
-            container.Register<IEventStorage, EventStoreEventStorage>().AsMultiInstance();
+            container.Register<IEventStorage>((c, o) =>
+                                                  {
+                                                      var es = new EventStoreEventStorage(
+                                                              c.Resolve<IMessageDispatcher>("EventDispatcher"));
+                                                      return es;
+                                                  });
         }
     }
 }

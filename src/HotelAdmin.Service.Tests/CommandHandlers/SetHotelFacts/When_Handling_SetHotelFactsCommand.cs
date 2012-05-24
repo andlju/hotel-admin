@@ -41,7 +41,7 @@ namespace HotelAdmin.Service.Tests.CommandHandlers.SetHotelFacts
 
             A.CallTo(() => RepositoryFake.Get(null)).WithAnyArguments().Returns(_hotel);
 
-            return new SetHotelFactsCommandHandler(ObjectContextFake, RepositoryFake, IdentityMapperFake, EventStorage);
+            return new SetHotelFactsCommandHandler(RepositoryFake, IdentityMapperFake, EventStorage);
         }
 
         protected override SetHotelFactsCommand When()
@@ -90,18 +90,6 @@ namespace HotelAdmin.Service.Tests.CommandHandlers.SetHotelFacts
                 Assert.AreEqual(true, e.Facts[2].Value);
 
             });
-        }
-
-        [TestMethod]
-        public void Then_Changes_Are_Saved()
-        {
-            A.CallTo(() => ObjectContextFake.SaveChanges()).MustHaveHappened(Repeated.Exactly.Once);
-        }
-
-        [TestMethod]
-        public void Then_Correct_Number_Of_Facts_Are_Set()
-        {
-            Assert.AreEqual(3, _hotel.Facts.Count);
         }
 
     }

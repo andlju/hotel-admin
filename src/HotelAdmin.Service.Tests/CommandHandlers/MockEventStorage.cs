@@ -17,5 +17,10 @@ namespace HotelAdmin.Service.Tests.CommandHandlers
         {
             _storedEvents.Add(evt);
         }
+
+        public IEnumerable<IEvent> GetAllEvents()
+        {
+            return _storedEvents;
+        }
     }
 }

@@ -27,7 +27,7 @@ namespace HotelAdmin.Service.Tests.CommandHandlers.UpdateFactType
             A.CallTo(() => IdentityMapperFake.GetModelId<FactType>(_factTypeAggregatedId)).Returns(_factTypeId);
             A.CallTo(() => RepositoryFake.Get(null)).WithAnyArguments().Returns(_factType);
 
-            return new UpdateFactTypeCommandHandler(ObjectContextFake, RepositoryFake, IdentityMapperFake, EventStorage);
+            return new UpdateFactTypeCommandHandler(RepositoryFake, IdentityMapperFake, EventStorage);
         }
 
         protected override UpdateFactTypeCommand When()
@@ -62,24 +62,5 @@ namespace HotelAdmin.Service.Tests.CommandHandlers.UpdateFactType
                 Assert.AreEqual("AdultPool", e.Code);
             });
         }
-
-        [TestMethod]
-        public void Then_FactType_Name_Is_Updated()
-        {
-            Assert.AreEqual("Adult pool", _factType.Name);
-        }
-
-        [TestMethod]
-        public void Then_FactType_Code_Is_Updated()
-        {
-            Assert.AreEqual("AdultPool", _factType.Code);
-        }
-
-        [TestMethod]
-        public void Then_Changes_Are_Saved()
-        {
-            A.CallTo(() => ObjectContextFake.SaveChanges()).MustHaveHappened(Repeated.Exactly.Once);
-        }
-
     }
 }

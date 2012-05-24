@@ -28,7 +28,7 @@ namespace HotelAdmin.Service.Tests.CommandHandlers.DeleteHotel
             A.CallTo(() => IdentityMapperFake.GetModelId<Hotel>(_hotelAggregatedId)).Returns(_hotelId);
             A.CallTo(() => RepositoryFake.Get(null)).WithAnyArguments().Returns(_hotel);
 
-            return new DeleteHotelCommandHandler(ObjectContextFake, RepositoryFake, IdentityMapperFake, EventStorage);
+            return new DeleteHotelCommandHandler(RepositoryFake, IdentityMapperFake, EventStorage);
         }
 
         protected override DeleteHotelCommand When()
@@ -59,20 +59,6 @@ namespace HotelAdmin.Service.Tests.CommandHandlers.DeleteHotel
                 Assert.AreEqual(_hotelAggregatedId, e.AggregateId);
             });
         }
-
-        [TestMethod]
-        public void Then_Changes_Are_Saved()
-        {
-            A.CallTo(() => ObjectContextFake.SaveChanges()).MustHaveHappened(Repeated.Exactly.Once);
-        }
-
-        [TestMethod]
-        public void Then_Hotel_Is_Deleted()
-        {
-            A.CallTo(() => RepositoryFake.Delete(null)).WhenArgumentsMatch(ac => ac.Get<Hotel>(0).Id == _hotelId).MustHaveHappened(Repeated.Exactly.Once);
-
-        }
-
 
     }
 }

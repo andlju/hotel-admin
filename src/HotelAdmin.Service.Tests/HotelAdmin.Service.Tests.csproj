@@ -60,6 +60,12 @@
     <Compile Include="CommandHandlers\SetHotelFacts\When_Handling_SetHotelFactsCommand_On_Nonexisting_Hotel.cs" />
     <Compile Include="CommandHandlers\UpdateFactType\When_Handling_UpdateFactTypeCommand.cs" />
     <Compile Include="CommandHandlers\UpdateHotel\When_Handling_UpdateHotelCommand.cs" />
+    <Compile Include="EventHandlers\FactTypes\When_Handling_FactTypeAddedEvent.cs" />
+    <Compile Include="EventHandlers\FactTypes\When_Handling_FactTypeUpdatedEvent.cs" />
+    <Compile Include="EventHandlers\Hotels\When_Handling_HotelAddedEvent.cs" />
+    <Compile Include="EventHandlers\Hotels\When_Handling_HotelFactsSetEvent.cs" />
+    <Compile Include="EventHandlers\Hotels\When_Handling_HotelUpdatedEvent.cs" />
+    <Compile Include="EventHandlers\With_EventHandler.cs" />
     <Compile Include="Infrastructure\When_Dispatching_A_Single_Message_With_Multiple_Handlers.cs" />
     <Compile Include="Infrastructure\When_Dispatching_Multiple_Message_With_Only_One_Handler.cs" />
     <Compile Include="Infrastructure\With_Dispatcher.cs" />

@@ -10,14 +10,12 @@ namespace HotelAdmin.Service.CommandHandlers
 {
     public class UpdateFactTypeCommandHandler : IMessageHandler<UpdateFactTypeCommand>
     {
-        private readonly IObjectContext _objectContext;
         private readonly IFactTypeRepository _factTypeRepository;
         private readonly IIdentityMapper _identityMapper;
         private readonly IEventStorage _eventStorage;
 
-        public UpdateFactTypeCommandHandler(IObjectContext objectContext, IFactTypeRepository factTypeRepository, IIdentityMapper identityMapper, IEventStorage eventStorage)
+        public UpdateFactTypeCommandHandler(IFactTypeRepository factTypeRepository, IIdentityMapper identityMapper, IEventStorage eventStorage)
         {
-            _objectContext = objectContext;
             _factTypeRepository = factTypeRepository;
             _identityMapper = identityMapper;
             _eventStorage = eventStorage;
@@ -29,10 +27,6 @@ namespace HotelAdmin.Service.CommandHandlers
             var factType = _factTypeRepository.Get(ft => ft.Id == modelId);
             if (factType == null)
                 throw new InvalidOperationException(string.Format("No FactType found with Id {0}", message.FactTypeAggregateId));
-            factType.Code = message.Code;
-            factType.Name = message.Name;
-            
-            _objectContext.SaveChanges();
 
             _eventStorage.Store(new FactTypeUpdatedEvent()
                                     {
