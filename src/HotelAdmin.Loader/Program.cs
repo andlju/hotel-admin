@@ -20,7 +20,7 @@ namespace HotelAdmin.Loader
             var objContext = new SingleUsageObjectContextAdapter(new DbContextFactory<HotelAdminContext>());
             var hotelRep = new HotelRepository(objContext);
             var factTypeRep = new FactTypeRepository(objContext);
-            var historyRep = new DummyHistoryItemRepository();
+            var historyRep = new HistoryItemRepository(objContext);
 
             var idMapRep = new IdentityMapRepository(objContext);
             var idMapper = new IdentityMapper(objContext, idMapRep);
@@ -28,8 +28,14 @@ namespace HotelAdmin.Loader
             var eventDispatcher = new MessageDispatcher();
             var factTypeEventHandlers = new FactTypeEventHandlers(objContext, factTypeRep, idMapper);
             var hotelEventHandlers = new HotelEventHandlers(objContext, hotelRep, idMapper);
+            var historyItemEventHandlers = new HistoryItemEventHandlers(objContext, historyRep, idMapper);
 
             eventDispatcher.RegisterHandler<HotelAddedEvent>(hotelEventHandlers);
+
+            eventDispatcher.RegisterHandler<HotelAddedEvent>(historyItemEventHandlers);
+            eventDispatcher.RegisterHandler<HotelUpdatedEvent>(historyItemEventHandlers);
+            eventDispatcher.RegisterHandler<HotelDeletedEvent>(historyItemEventHandlers);
+
             eventDispatcher.RegisterHandler<HotelUpdatedEvent>(hotelEventHandlers);
             eventDispatcher.RegisterHandler<HotelDeletedEvent>(hotelEventHandlers);
             eventDispatcher.RegisterHandler<HotelFactsSetEvent>(hotelEventHandlers);

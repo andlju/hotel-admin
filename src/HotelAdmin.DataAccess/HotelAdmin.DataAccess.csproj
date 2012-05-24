@@ -51,6 +51,7 @@
     <Compile Include="AspNetObjectContextAdapter.cs" />
     <Compile Include="DummyHistoryItemRepository.cs" />
     <Compile Include="FactTypeRepository.cs" />
+    <Compile Include="HistoryItemRepository.cs" />
     <Compile Include="HotelAdminContext.cs" />
     <Compile Include="HotelRepository.cs" />
     <Compile Include="IdentityMapRepository.cs" />

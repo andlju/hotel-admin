@@ -12,6 +12,11 @@ namespace HotelAdmin.DataAccess
             throw new NotImplementedException();
         }
 
+        public HistoryItem GetLastItem(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<HistoryItem> List()
         {
             yield return new HistoryItem()

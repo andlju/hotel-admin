@@ -35,7 +35,7 @@ namespace HotelAdmin.Web
             container.Register<IIdentityMapRepository, IdentityMapRepository>().AsMultiInstance();
             container.Register<IHotelRepository, HotelRepository>().AsMultiInstance();
             container.Register<IFactTypeRepository, FactTypeRepository>().AsMultiInstance();
-            container.Register<IHistoryItemRepository, DummyHistoryItemRepository>().AsMultiInstance();
+            container.Register<IHistoryItemRepository, HistoryItemRepository>().AsMultiInstance();
 
             // CQRS Infrastructure
             container.Register<IMessageDispatcher>((c, o) =>
@@ -54,12 +54,18 @@ namespace HotelAdmin.Web
 
             container.Register<HotelEventHandlers>().AsMultiInstance();
             container.Register<FactTypeEventHandlers>().AsMultiInstance();
+            container.Register<HistoryItemEventHandlers>().AsMultiInstance();
 
             container.Register<IMessageDispatcher>((c, o) =>
                                                        {
                                                            var eventDispatcher = new MessageDispatcher();
 
                                                            eventDispatcher.RegisterHandler<HotelAddedEvent>(c.Resolve<HotelEventHandlers>());
+                                                           eventDispatcher.RegisterHandler<HotelAddedEvent>(c.Resolve<HistoryItemEventHandlers>());
+
+                                                           eventDispatcher.RegisterHandler<HotelUpdatedEvent>(c.Resolve<HistoryItemEventHandlers>());
+                                                           eventDispatcher.RegisterHandler<HotelDeletedEvent>(c.Resolve<HistoryItemEventHandlers>());
+
                                                            eventDispatcher.RegisterHandler<HotelUpdatedEvent>(c.Resolve<HotelEventHandlers>());
                                                            eventDispatcher.RegisterHandler<HotelFactsSetEvent>(c.Resolve<HotelEventHandlers>());
                                                            eventDispatcher.RegisterHandler<HotelDeletedEvent>(c.Resolve<HotelEventHandlers>());

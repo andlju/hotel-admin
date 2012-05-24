@@ -58,6 +58,7 @@
     <Compile Include="CommandHandlers\UpdateFactTypeCommandHandler.cs" />
     <Compile Include="CommandHandlers\UpdateHotelCommandHandler.cs" />
     <Compile Include="EventHandlers\FactTypeEventHandlers.cs" />
+    <Compile Include="EventHandlers\HistoryItemEventHandlers.cs" />
     <Compile Include="EventHandlers\HotelEventHandlers.cs" />
     <Compile Include="FactTypeModel.cs" />
     <Compile Include="FactTypeService.cs" />

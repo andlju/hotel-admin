@@ -34,19 +34,4 @@ namespace HotelAdmin.DataAccess
             return mainQuery.ToArray();
         }
     }
-
-    public class HistoryItemRepository : RepositoryBase<HistoryItem>, IHistoryItemRepository
-    {
-        public HistoryItemRepository(IDbSetProvider objectSetProvider) : base(objectSetProvider)
-        {
-        }
-
-        protected override IQueryable<HistoryItem> Query
-        {
-            get
-            {
-                return base.Query.Include("Hotel");
-            }
-        }
-    }
 }
