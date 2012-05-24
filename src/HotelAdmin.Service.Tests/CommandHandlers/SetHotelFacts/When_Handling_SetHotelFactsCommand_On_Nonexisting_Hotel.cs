@@ -23,7 +23,7 @@ namespace HotelAdmin.Service.Tests.CommandHandlers.SetHotelFacts
 
             A.CallTo(() => RepositoryFake.Get(null)).WithAnyArguments().Returns(null);
 
-            return new SetHotelFactsCommandHandler(ObjectContextFake, RepositoryFake, IdentityMapperFake);
+            return new SetHotelFactsCommandHandler(ObjectContextFake, RepositoryFake, IdentityMapperFake, EventStorage);
         }
 
         protected override SetHotelFactsCommand When()

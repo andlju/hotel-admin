@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using HotelAdmin.Domain;
 using HotelAdmin.Messages.Commands;
+using HotelAdmin.Messages.Events;
+using HotelAdmin.Service.Infrastructure;
 using Petite;
 
 namespace HotelAdmin.Service.CommandHandlers
@@ -12,12 +14,14 @@ namespace HotelAdmin.Service.CommandHandlers
         private readonly IObjectContext _objectContext;
         private readonly IHotelRepository _hotelRepository;
         private readonly IIdentityMapper _identityMapper;
+        private readonly IEventStorage _eventStorage;
 
-        public SetHotelFactsCommandHandler(IObjectContext objectContext, IHotelRepository hotelRepository, IIdentityMapper identityMapper)
+        public SetHotelFactsCommandHandler(IObjectContext objectContext, IHotelRepository hotelRepository, IIdentityMapper identityMapper, IEventStorage eventStorage)
         {
             _objectContext = objectContext;
             _hotelRepository = hotelRepository;
             _identityMapper = identityMapper;
+            _eventStorage = eventStorage;
         }
 
         public void Handle(SetHotelFactsCommand message, IDictionary<string, object> metaData)
@@ -39,6 +43,17 @@ namespace HotelAdmin.Service.CommandHandlers
                 hotel.Facts.Add(fact);
             }
             _objectContext.SaveChanges();
+
+            _eventStorage.Store(new HotelFactsSetEvent()
+                                    {
+                                        HotelAggregateId = message.HotelAggregateId,
+                                        Facts = message.Facts.Select(f => new HotelFactsSetEvent.Fact()
+                                                                              {
+                                                                                  FactTypeAggregateId = f.FactTypeAggregateId,
+                                                                                  Value = f.Value,
+                                                                                  Details = f.Details
+                                                                              }).ToArray()
+                                    });
         }
     }
 }

@@ -63,6 +63,7 @@ namespace HotelAdmin.Web
             container.Register<IIdentityMapper, IdentityMapper>().AsMultiInstance();
             container.Register<IHotelService, HotelService>().AsMultiInstance();
             container.Register<IFactTypeService, FactTypeService>().AsMultiInstance();
+            container.Register<IEventStorage, EventStoreEventStorage>().AsMultiInstance();
         }
     }
 }

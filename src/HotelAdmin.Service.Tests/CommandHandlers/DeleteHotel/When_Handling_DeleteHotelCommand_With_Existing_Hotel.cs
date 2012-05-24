@@ -2,6 +2,7 @@
 using FakeItEasy;
 using HotelAdmin.Domain;
 using HotelAdmin.Messages.Commands;
+using HotelAdmin.Messages.Events;
 using HotelAdmin.Service.CommandHandlers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -27,7 +28,7 @@ namespace HotelAdmin.Service.Tests.CommandHandlers.DeleteHotel
             A.CallTo(() => IdentityMapperFake.GetModelId<Hotel>(_hotelAggregatedId)).Returns(_hotelId);
             A.CallTo(() => RepositoryFake.Get(null)).WithAnyArguments().Returns(_hotel);
 
-            return new DeleteHotelCommandHandler(ObjectContextFake, RepositoryFake, IdentityMapperFake);
+            return new DeleteHotelCommandHandler(ObjectContextFake, RepositoryFake, IdentityMapperFake, EventStorage);
         }
 
         protected override DeleteHotelCommand When()
@@ -36,6 +37,27 @@ namespace HotelAdmin.Service.Tests.CommandHandlers.DeleteHotel
                        {
                            HotelAggregateId = _hotelAggregatedId
                        };
+        }
+
+        [TestMethod]
+        public void Then_Exactly_One_Event_Is_Stored()
+        {
+            AssertEvents.NumberOfEvents(1);
+        }
+
+        [TestMethod]
+        public void Then_HotelDeletedEvent_Is_Stored()
+        {
+            AssertEvents.IsType<HotelDeletedEvent>(0);
+        }
+
+        [TestMethod]
+        public void Then_Contents_Of_Event_Is_Correct()
+        {
+            AssertEvents.Contents<HotelDeletedEvent>(0, e =>
+            {
+                Assert.AreEqual(_hotelAggregatedId, e.AggregateId);
+            });
         }
 
         [TestMethod]

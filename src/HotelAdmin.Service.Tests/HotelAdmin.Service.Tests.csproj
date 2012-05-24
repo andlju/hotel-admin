@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="CommandHandlers\AddFactType\When_Handling_AddFactTypeCommand.cs" />
     <Compile Include="CommandHandlers\AddHotel\When_Handling_AddHotelCommand.cs" />
+    <Compile Include="CommandHandlers\MockEventStorage.cs" />
     <Compile Include="CommandHandlers\With_CommandHandler.cs" />
     <Compile Include="CommandHandlers\DeleteHotel\When_Handling_DeleteHotelCommand_With_Existing_Hotel.cs" />
     <Compile Include="CommandHandlers\SetHotelFacts\When_Handling_SetHotelFactsCommand.cs" />

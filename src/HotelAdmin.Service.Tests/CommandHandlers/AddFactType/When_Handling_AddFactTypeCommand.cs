@@ -2,6 +2,7 @@
 using FakeItEasy;
 using HotelAdmin.Domain;
 using HotelAdmin.Messages.Commands;
+using HotelAdmin.Messages.Events;
 using HotelAdmin.Service.CommandHandlers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -18,7 +19,7 @@ namespace HotelAdmin.Service.Tests.CommandHandlers.AddFactType
             A.CallTo(() => RepositoryFake.Add(null)).WithAnyArguments().
                 Invokes(call => ((FactType)call.Arguments[0]).Id = _factTypeId);
 
-            return new AddFactTypeCommandHandler(ObjectContextFake, RepositoryFake, IdentityMapperFake);
+            return new AddFactTypeCommandHandler(ObjectContextFake, RepositoryFake, IdentityMapperFake, EventStorage);
         }
 
         protected override AddFactTypeCommand When()
@@ -29,6 +30,29 @@ namespace HotelAdmin.Service.Tests.CommandHandlers.AddFactType
                            Code = "ChildrensPool",
                            Name = "Childrens pool",
                        };
+        }
+
+        [TestMethod]
+        public void Then_Exactly_One_Event_Is_Stored()
+        {
+            AssertEvents.NumberOfEvents(1);
+        }
+
+        [TestMethod]
+        public void Then_FactTypeAddedEvent_Is_Stored()
+        {
+            AssertEvents.IsType<FactTypeAddedEvent>(0);
+        }
+
+        [TestMethod]
+        public void Then_Contents_Of_Event_Is_Correct()
+        {
+            AssertEvents.Contents<FactTypeAddedEvent>(0, e =>
+                                                             {
+                                                                 Assert.AreEqual(_factTypeAggregatedId, e.AggregateId);
+                                                                 Assert.AreEqual("Childrens pool", e.Name);
+                                                                 Assert.AreEqual("ChildrensPool", e.Code);
+                                                             });
         }
 
         [TestMethod]

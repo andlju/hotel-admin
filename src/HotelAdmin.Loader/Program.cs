@@ -20,17 +20,18 @@ namespace HotelAdmin.Loader
             var historyRep = new DummyHistoryItemRepository();
 
             var idMapRep = new IdentityMapRepository(objContext);
+            var eventStorage = new EventStoreEventStorage();
 
             var idMapper = new IdentityMapper(objContext, idMapRep);
             
             var messageDispatcher = new MessageDispatcher();
-            messageDispatcher.RegisterHandler(new AddHotelCommandHandler(objContext, hotelRep, idMapper));
-            messageDispatcher.RegisterHandler(new UpdateHotelCommandHandler(objContext, hotelRep, idMapper));
-            messageDispatcher.RegisterHandler(new SetHotelFactsCommandHandler(objContext, hotelRep, idMapper));
-            messageDispatcher.RegisterHandler(new DeleteHotelCommandHandler(objContext, hotelRep, idMapper));
+            messageDispatcher.RegisterHandler(new AddHotelCommandHandler(objContext, hotelRep, idMapper, eventStorage));
+            messageDispatcher.RegisterHandler(new UpdateHotelCommandHandler(objContext, hotelRep, idMapper, eventStorage));
+            messageDispatcher.RegisterHandler(new SetHotelFactsCommandHandler(objContext, hotelRep, idMapper, eventStorage));
+            messageDispatcher.RegisterHandler(new DeleteHotelCommandHandler(objContext, hotelRep, idMapper, eventStorage));
 
-            messageDispatcher.RegisterHandler(new AddFactTypeCommandHandler(objContext, factTypeRep, idMapper));
-            messageDispatcher.RegisterHandler(new UpdateFactTypeCommandHandler(objContext, factTypeRep, idMapper));
+            messageDispatcher.RegisterHandler(new AddFactTypeCommandHandler(objContext, factTypeRep, idMapper, eventStorage));
+            messageDispatcher.RegisterHandler(new UpdateFactTypeCommandHandler(objContext, factTypeRep, idMapper, eventStorage));
 
             FactTypeService factTypeService = new FactTypeService(factTypeRep, messageDispatcher, idMapper);
             HotelService hotelService = new HotelService(hotelRep, historyRep, messageDispatcher, idMapper);

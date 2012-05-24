@@ -2,6 +2,7 @@
 using FakeItEasy;
 using HotelAdmin.Domain;
 using HotelAdmin.Messages.Commands;
+using HotelAdmin.Messages.Events;
 using HotelAdmin.Service.CommandHandlers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -18,7 +19,7 @@ namespace HotelAdmin.Service.Tests.CommandHandlers.AddHotel
             A.CallTo(() => RepositoryFake.Add(null)).WithAnyArguments().
                 Invokes(call => ((Hotel)call.Arguments[0]).Id = _hotelId);
 
-            return new AddHotelCommandHandler(ObjectContextFake, RepositoryFake, IdentityMapperFake);
+            return new AddHotelCommandHandler(ObjectContextFake, RepositoryFake, IdentityMapperFake, EventStorage);
         }
 
         protected override AddHotelCommand When()
@@ -33,6 +34,33 @@ namespace HotelAdmin.Service.Tests.CommandHandlers.AddHotel
                            Latitude = 12.0f,
                            Longitude = 32.4f
                        };
+        }
+
+        [TestMethod]
+        public void Then_Exactly_One_Event_Is_Stored()
+        {
+            AssertEvents.NumberOfEvents(1);
+        }
+
+        [TestMethod]
+        public void Then_HotelAddedEvent_Is_Stored()
+        {
+            AssertEvents.IsType<HotelAddedEvent>(0);
+        }
+
+        [TestMethod]
+        public void Then_Contents_Of_Event_Is_Correct()
+        {
+            AssertEvents.Contents<HotelAddedEvent>(0, e =>
+            {
+                Assert.AreEqual(_hotelAggregatedId, e.AggregateId);
+                Assert.AreEqual("Test Beach Hotel", e.Name);
+                Assert.AreEqual("A nice hotel situated right at Test Beach", e.Description);
+                Assert.AreEqual("Test Beach", e.ResortName);
+                Assert.AreEqual("http://test.com/test.jpg", e.ImageUrl);
+                Assert.AreEqual(12.0f, e.Latitude);
+                Assert.AreEqual(32.4f, e.Longitude);
+            });
         }
 
         [TestMethod]

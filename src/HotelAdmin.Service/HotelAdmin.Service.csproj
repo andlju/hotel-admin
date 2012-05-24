@@ -34,6 +34,12 @@
     <Reference Include="Common.Logging">
       <HintPath>..\packages\Common.Logging.2.0.0\lib\2.0\Common.Logging.dll</HintPath>
     </Reference>
+    <Reference Include="EventStore">
+      <HintPath>..\packages\EventStore.3.0.11326.44\lib\net40\EventStore.dll</HintPath>
+    </Reference>
+    <Reference Include="EventStore.Serialization.ServiceStack">
+      <HintPath>..\packages\EventStore.Serialization.ServiceStack.3.0.11326.44\lib\net40\EventStore.Serialization.ServiceStack.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
@@ -60,6 +66,7 @@
     <Compile Include="IHotelService.cs" />
     <Compile Include="IIdentityMapper.cs" />
     <Compile Include="IMessageHandler.cs" />
+    <Compile Include="Infrastructure\IEventStorage.cs" />
     <Compile Include="Infrastructure\IMessageDispatcher.cs" />
     <Compile Include="Infrastructure\MessageDispatcher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -75,7 +82,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="App_Readme\EventStore - Architectural Overview.docx" />
+    <None Include="App_Readme\EventStore - Transactional Integrity.docx" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Readme\EventStore.license.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

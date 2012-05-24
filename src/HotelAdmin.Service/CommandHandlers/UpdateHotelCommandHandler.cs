@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using HotelAdmin.Domain;
 using HotelAdmin.Messages.Commands;
+using HotelAdmin.Messages.Events;
+using HotelAdmin.Service.Infrastructure;
 using Petite;
 
 namespace HotelAdmin.Service.CommandHandlers
@@ -11,12 +13,14 @@ namespace HotelAdmin.Service.CommandHandlers
         private readonly IObjectContext _objectContext;
         private readonly IHotelRepository _hotelRepository;
         private readonly IIdentityMapper _identityMapper;
+        private readonly IEventStorage _eventStorage;
 
-        public UpdateHotelCommandHandler(IObjectContext objectContext, IHotelRepository hotelRepository, IIdentityMapper identityMapper)
+        public UpdateHotelCommandHandler(IObjectContext objectContext, IHotelRepository hotelRepository, IIdentityMapper identityMapper, IEventStorage eventStorage)
         {
             _objectContext = objectContext;
             _hotelRepository = hotelRepository;
             _identityMapper = identityMapper;
+            _eventStorage = eventStorage;
         }
 
         public void Handle(UpdateHotelCommand message, IDictionary<string, object> metaData)
@@ -32,6 +36,14 @@ namespace HotelAdmin.Service.CommandHandlers
             hotel.Image = message.ImageUrl;
             
             _objectContext.SaveChanges();
+
+            _eventStorage.Store(new HotelUpdatedEvent()
+                                    {
+                                        HotelAggregateId = message.HotelAggregateId,
+                                        Name = message.Name,
+                                        Description = message.Description,
+                                        ImageUrl = message.ImageUrl
+                                    });
         }
     }
 }

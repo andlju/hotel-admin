@@ -2,6 +2,7 @@
 using FakeItEasy;
 using HotelAdmin.Domain;
 using HotelAdmin.Messages.Commands;
+using HotelAdmin.Messages.Events;
 using HotelAdmin.Service.CommandHandlers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -30,7 +31,7 @@ namespace HotelAdmin.Service.Tests.CommandHandlers.UpdateHotel
             A.CallTo(() => IdentityMapperFake.GetModelId<Hotel>(_hotelAggregatedId)).Returns(_hotelId);
             A.CallTo(() => RepositoryFake.Get(null)).WithAnyArguments().Returns(_hotel);
 
-            return new UpdateHotelCommandHandler(ObjectContextFake, RepositoryFake, IdentityMapperFake);
+            return new UpdateHotelCommandHandler(ObjectContextFake, RepositoryFake, IdentityMapperFake, EventStorage);
         }
 
         protected override UpdateHotelCommand When()
@@ -42,6 +43,30 @@ namespace HotelAdmin.Service.Tests.CommandHandlers.UpdateHotel
                 Description = "A nice resort situated right at Testy Beach",
                 ImageUrl = "http://test.com/testar.jpg",
             };
+        }
+
+        [TestMethod]
+        public void Then_Exactly_One_Event_Is_Stored()
+        {
+            AssertEvents.NumberOfEvents(1);
+        }
+
+        [TestMethod]
+        public void Then_HotelUpdatedEvent_Is_Stored()
+        {
+            AssertEvents.IsType<HotelUpdatedEvent>(0);
+        }
+
+        [TestMethod]
+        public void Then_Contents_Of_Event_Is_Correct()
+        {
+            AssertEvents.Contents<HotelUpdatedEvent>(0, e =>
+            {
+                Assert.AreEqual(_hotelAggregatedId, e.AggregateId);
+                Assert.AreEqual("Testy Beach Resort", e.Name);
+                Assert.AreEqual("A nice resort situated right at Testy Beach", e.Description);
+                Assert.AreEqual("http://test.com/testar.jpg", e.ImageUrl);
+            });
         }
 
         [TestMethod]

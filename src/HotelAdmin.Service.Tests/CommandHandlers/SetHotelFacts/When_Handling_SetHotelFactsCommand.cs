@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using FakeItEasy;
 using HotelAdmin.Domain;
 using HotelAdmin.Messages.Commands;
+using HotelAdmin.Messages.Events;
 using HotelAdmin.Service.CommandHandlers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -40,7 +41,7 @@ namespace HotelAdmin.Service.Tests.CommandHandlers.SetHotelFacts
 
             A.CallTo(() => RepositoryFake.Get(null)).WithAnyArguments().Returns(_hotel);
 
-            return new SetHotelFactsCommandHandler(ObjectContextFake, RepositoryFake, IdentityMapperFake);
+            return new SetHotelFactsCommandHandler(ObjectContextFake, RepositoryFake, IdentityMapperFake, EventStorage);
         }
 
         protected override SetHotelFactsCommand When()
@@ -55,6 +56,40 @@ namespace HotelAdmin.Service.Tests.CommandHandlers.SetHotelFacts
                                                          new SetHotelFactsCommand.Fact { FactTypeAggregateId = _fact3AggregateId, Value = true, Details = "€2 per day/€10 per week" }, 
                                                      }
                        };
+        }
+
+        [TestMethod]
+        public void Then_Exactly_One_Event_Is_Stored()
+        {
+            AssertEvents.NumberOfEvents(1);
+        }
+
+        [TestMethod]
+        public void Then_HotelFactsSetEvent_Is_Stored()
+        {
+            AssertEvents.IsType<HotelFactsSetEvent>(0);
+        }
+
+        [TestMethod]
+        public void Then_Contents_Of_Event_Is_Correct()
+        {
+            AssertEvents.Contents<HotelFactsSetEvent>(0, e =>
+            {
+                Assert.AreEqual(_hotelAggregateId, e.AggregateId);
+                
+                Assert.AreEqual(_fact1AggregateId, e.Facts[0].FactTypeAggregateId);
+                Assert.AreEqual("", e.Facts[0].Details);
+                Assert.AreEqual(true, e.Facts[0].Value);
+
+                Assert.AreEqual(_fact2AggregateId, e.Facts[1].FactTypeAggregateId);
+                Assert.AreEqual("1200m", e.Facts[1].Details);
+                Assert.AreEqual(true, e.Facts[1].Value);
+
+                Assert.AreEqual(_fact3AggregateId, e.Facts[2].FactTypeAggregateId);
+                Assert.AreEqual("€2 per day/€10 per week", e.Facts[2].Details);
+                Assert.AreEqual(true, e.Facts[2].Value);
+
+            });
         }
 
         [TestMethod]
