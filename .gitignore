@@ -24,4 +24,4 @@ _ReSharper*
 *.[pP]ublish.xml
 *mm_cache.bin
 *.sln.cache
-
+[u|U]ser.[c|C]onfig

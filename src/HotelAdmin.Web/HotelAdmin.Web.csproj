@@ -1,0 +1,209 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B1263A98-C3AB-4118-B942-8941DDCF8689}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>HotelAdmin.Web</RootNamespace>
+    <AssemblyName>HotelAdmin.Web</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <UseIISExpress>false</UseIISExpress>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=4.3.1.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.4.3.1\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Nancy, Version=0.10.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Nancy.0.10.0\lib\net40\Nancy.dll</HintPath>
+    </Reference>
+    <Reference Include="Nancy.Hosting.Aspnet, Version=0.10.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Nancy.Hosting.Aspnet.0.10.0\lib\net40\Nancy.Hosting.Aspnet.dll</HintPath>
+    </Reference>
+    <Reference Include="Nancy.ViewEngines.Razor, Version=0.10.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Nancy.Viewengines.Razor.0.10.0\lib\net40\Nancy.ViewEngines.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Razor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Nancy.Viewengines.Razor.0.10.0\lib\net40\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\css\main.css" />
+    <Content Include="Content\img\glyphicons-halflings-white.png" />
+    <Content Include="Content\img\glyphicons-halflings.png" />
+    <Content Include="Content\js\bootstrap-alert.js" />
+    <Content Include="Content\js\bootstrap-button.js" />
+    <Content Include="Content\js\bootstrap-carousel.js" />
+    <Content Include="Content\js\bootstrap-collapse.js" />
+    <Content Include="Content\js\bootstrap-dropdown.js" />
+    <Content Include="Content\js\bootstrap-modal.js" />
+    <Content Include="Content\js\bootstrap-popover.js" />
+    <Content Include="Content\js\bootstrap-scrollspy.js" />
+    <Content Include="Content\js\bootstrap-tab.js" />
+    <Content Include="Content\js\bootstrap-tooltip.js" />
+    <Content Include="Content\js\bootstrap-transition.js" />
+    <Content Include="Content\js\bootstrap-typeahead.js" />
+    <Content Include="Content\js\less-1.2.2.min.js" />
+    <Content Include="Content\js\main\history_vm.js" />
+    <Content Include="Content\js\main\facttype_vm.js" />
+    <Content Include="Content\js\main\utils.js" />
+    <Content Include="Content\js\main\hotel_vm.js" />
+    <Content Include="Main\Views\Layout_Full.html" />
+    <Content Include="Main\Views\Layout_Sidebar.html" />
+    <Content Include="Scripts\jquery-1.7.1-vsdoc.js" />
+    <Content Include="Scripts\jquery-1.7.1.js" />
+    <Content Include="Scripts\jquery-1.7.1.min.js" />
+    <Content Include="Scripts\knockout.debug.js" />
+    <Content Include="Scripts\knockout.js" />
+    <Content Include="Web.config" />
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Api\FactTypeModule.cs" />
+    <Compile Include="Api\HotelApiModule.cs" />
+    <Compile Include="HotelAdminBootstrapper.cs" />
+    <Compile Include="Main\MainModule.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HotelAdmin.DataAccess\HotelAdmin.DataAccess.csproj">
+      <Project>{EAA5A409-2412-4672-96CD-10272F467CEE}</Project>
+      <Name>HotelAdmin.DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HotelAdmin.Domain\HotelAdmin.Domain.csproj">
+      <Project>{E662BB8E-A8D5-48A9-B0C1-FC50042F41EE}</Project>
+      <Name>HotelAdmin.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HotelAdmin.Service\HotelAdmin.Service.csproj">
+      <Project>{8F9EEDFB-5751-4736-B03A-A8386F0F652C}</Project>
+      <Name>HotelAdmin.Service</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Main\Views\Hotels.html" />
+    <Content Include="Main\Views\Index.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Content\less\accordion.less" />
+    <None Include="Content\less\alerts.less" />
+    <None Include="Content\less\bootstrap.less" />
+    <None Include="Content\less\breadcrumbs.less" />
+    <None Include="Content\less\button-groups.less" />
+    <None Include="Content\less\buttons.less" />
+    <None Include="Content\less\carousel.less" />
+    <None Include="Content\less\close.less" />
+    <None Include="Content\less\code.less" />
+    <None Include="Content\less\component-animations.less" />
+    <None Include="Content\less\dropdowns.less" />
+    <None Include="Content\less\forms.less" />
+    <None Include="Content\less\grid.less" />
+    <None Include="Content\less\hero-unit.less" />
+    <None Include="Content\less\labels.less" />
+    <None Include="Content\less\layouts.less" />
+    <None Include="Content\less\mixins.less" />
+    <None Include="Content\less\modals.less" />
+    <None Include="Content\less\navbar.less" />
+    <None Include="Content\less\navs.less" />
+    <None Include="Content\less\pager.less" />
+    <None Include="Content\less\pagination.less" />
+    <None Include="Content\less\popovers.less" />
+    <None Include="Content\less\progress-bars.less" />
+    <None Include="Content\less\reset.less" />
+    <None Include="Content\less\responsive.less" />
+    <None Include="Content\less\scaffolding.less" />
+    <None Include="Content\less\sprites.less" />
+    <None Include="Content\less\tables.less" />
+    <None Include="Content\less\thumbnails.less" />
+    <None Include="Content\less\tooltip.less" />
+    <None Include="Content\less\type.less" />
+    <None Include="Content\less\utilities.less" />
+    <None Include="Content\less\variables.less" />
+    <None Include="Content\less\wells.less" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>4130</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>
+          </IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <PropertyGroup>
+    <PostBuildEvent>
+xcopy /s /y "$(SolutionDir)packages\Nancy.Viewengines.Razor.0.10.0\BuildProviders\Nancy.ViewEngines.Razor.BuildProviders.dll" "$(ProjectDir)bin"
+xcopy /s /y "$(SolutionDir)packages\Nancy.Viewengines.Razor.0.10.0\lib\Net40\Nancy.ViewEngines.Razor.dll" "$(ProjectDir)bin"</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

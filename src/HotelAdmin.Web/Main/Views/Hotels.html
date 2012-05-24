@@ -1,0 +1,198 @@
+﻿@Master['Layout_Full'] @Section['Scripts']
+<script type="text/javascript" src="/Content/js/main/hotel_vm.js"></script>
+<script type="text/javascript" src="/Content/js/main/facttype_vm.js"></script>
+<script type="text/javascript" src="/Content/js/main/utils.js"></script>
+<script type="text/javascript">
+
+    function HotelsViewModel() {
+        var self = this;
+
+        self.hotelList = ko.observable(new HotelListViewModel());
+
+        self.factTypeList = ko.observable(new FactTypeListViewModel());
+    }
+
+    $(function () {
+        var hotelsViewModel = new HotelsViewModel();
+
+        ko.applyBindings(hotelsViewModel);
+        hotelsViewModel.hotelList().search();
+        hotelsViewModel.hotelList().refreshQueryFacts();
+
+        hotelsViewModel.factTypeList().refresh();
+    });
+</script>
+@EndSection
+
+@Section['Header'] 
+
+@EndSection 
+
+@Section['MainContent']
+
+<section id="findSection" data-bind="with: hotelList">
+    
+    <form id="findForm" action="." data-bind="submit: search" method="POST" class="form-search">
+        <input type="text" name="name" id="findFormName" data-bind="value: query, valueUpdate: 'afterkeydown'" placeholder="Query"/>
+        <a class="btn" data-toggle="modal" href="#factsFilterDialog">Filter...</a>
+        <input type="submit" value="Sök" class="btn btn-primary"/>
+    </form>
+    
+    <div id="factsFilterDialog" class="modal fade">
+        <div class="modal-header">
+            <a class="close" data-dismiss="modal">×</a>
+            <h3>Facts</h3>
+        </div>
+        <div class="modal-body">
+            <form class="form-horizontal">
+                <!-- ko foreach: queryFacts -->
+                <label class="checkbox">
+                    <input type="checkbox" data-bind="checked: value" />
+                    <span data-bind="text: name"></span>
+                </label>
+                <!-- /ko -->
+            </form>
+        </div>
+        <div class="modal-footer">
+            <a class="btn btn-primary" data-toggle="modal" href="#factsFilterDialog">Close</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="span8">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th class="span1">Id</th>
+                        <th class="span3">Name</th>
+                        <th class="span2">Resort</th>
+                        <th class="span2">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- ko foreach: searchResult -->
+                    <tr data-bind="event: { mouseover: peek, mouseout: $parent.unpeek }">
+                        <td data-bind="text: id"></td>
+                        <td data-bind="text: name"></td>
+                        <td data-bind="text: resortName"></td>
+                        <td><a href="#" class="btn btn-mini" data-bind="click: select">Edit</a>&nbsp;<a href="#" class="btn btn-mini btn-danger">Delete</a></td>
+                    </tr>
+                    <!-- /ko -->
+                    <tr>
+                        <td colspan="4"><a href="#" class="btn btn-mini" data-bind="click: addNewHotel">Add</a></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="pagination pagination-centered">
+                <ul>
+                    <li data-bind="css: { disabled: pageNo() == 0 }"><a href="#" data-bind="click: function() { pageNo(0); }">&larr;</a></li>
+                    <!-- ko foreach: allPages -->
+                    <li data-bind="css: { active : $data == $parent.pageNo() }"><a href="#" data-bind="text: $data + 1, click: function() { $parent.pageNo($data) }"></a></li>
+                    <!-- /ko -->
+                    <li data-bind="css: { disabled: pageNo() == totalPages() }"><a href="#" data-bind="click: function() { pageNo(totalPages()); }">&rarr;</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="span4">
+            <h3>Information</h3>
+            <div class="well" data-bind="with: peekHotelViewModel">
+                <span data-bind="text: description"></span>
+            </div>
+        </div>
+    </div>
+    
+    <div id="hotelInfoDialog" class="modal fade" data-bind="modalVisible: selectedHotelViewModel">
+        <div data-bind="with: selectedHotelViewModel">
+            <div class="modal-header">
+                <a class="close" data-dismiss="modal">×</a>
+                <h3>Hotel</h3>
+            </div>
+            <div class="modal-body">
+                <form id="infoForm" action="." data-bind="submit: update" class="form-vertical" method="POST">
+                    <fieldset>
+                        <div class="tabbable">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a href="#info" data-toggle="tab">Information</a></li>
+                                <li><a href="#facts" data-toggle="tab">Facts</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div id="info" class="tab-pane active">
+                                    <label for="name">Hotel name</label>
+                                    <input type="text" name="name" data-bind="value: name, valueUpdate: 'afterkeydown'" id="infoFormName" />
+                                    <label for="name">Description</label>
+                                    <textarea name="description" rows="6" class="input-xlarge" data-bind="value: description, valueUpdate: 'afterkeydown'"></textarea>
+                                </div>
+                                <div id="facts" class="tab-pane">
+                                    <h2>Facts</h2>
+                                    <table class="table table-striped">
+                                        <thead><tr><th>Fact</th><th colspan="2">Value</th><th></th></tr></thead>
+                                        <tbody>
+                                            <!-- ko foreach: facts -->
+                                            <tr>
+                                                <td class="span3" data-bind="text: name"></td>
+                                                <td><input type="checkbox" data-bind="checked: value"/></td>
+                                                <td><input class="span2" type="text" data-bind="value: details, enable: value" /></td>
+                                                <td><button type="button" class="btn btn-mini btn-danger" data-bind="click: function() { $parent.deleteFact($data) }">Delete</button></td>
+                                            </tr>
+                                            <!-- /ko -->
+                                            <tr data-bind="with: newFact">
+                                                <td><select class="span3" data-bind="options: $root.factTypeList().factTypes, optionsText: 'name', value: factType, optionsCaption: 'Fact Type...'"></select></td>
+                                                <td><input type="checkbox" data-bind="checked: value"/></td>
+                                                <td><input type="text" data-bind="value: details, enable: value" class="span2"/></td>
+                                                <td><button type="button" class="btn btn-mini" data-bind="click: $parent.addNewFact">Add</button></td>
+                                            </tr>
+                                        </tbody>
+                                        
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-bind="click: $parent.unselect">Close</button>
+                <button class="btn btn-primary" data-bind="enable: isDirty, click: update">Update</button>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+@EndSection
+
+@Section['Sidebar']
+<div id="find" data-bind="with: findViewModel">
+    <form id="findForm" method="GET" action="." class="form-stacked">
+    <fieldset>
+        <legend>Find hotels</legend>
+        <div class="clearfix">
+            <div class="input">
+                <input name="q" data-bind="value: query, valueUpdate: 'afterkeydown'" id="findFormQuery"
+                    class="first-in-form" />
+                <!--<input type="submit" class="btn primary" value="Find" data-bind="click: search" />-->
+            </div>
+        </div>
+    </fieldset>
+    </form>
+    <div>
+        <table class="zebra-striped">
+            <thead>
+                <tr>
+                    <th>
+                        Hotel name
+                    </th>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: searchResult">
+                <tr>
+                    <td>
+                        <a href="#" data-bind="text: name, click: select"></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+@EndSection 

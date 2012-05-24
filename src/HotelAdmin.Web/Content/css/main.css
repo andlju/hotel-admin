@@ -1,0 +1,9 @@
+﻿/* Override some defaults */
+html, body
+{
+    background-color: #eee;
+}
+body
+{
+    padding-top: 70px;  /* 40px to make the container go all the way to the bottom of the topbar */
+}
