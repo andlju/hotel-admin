@@ -51,19 +51,33 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandHandlers\AddFactType\When_Handling_AddFactTypeCommand.cs" />
+    <Compile Include="CommandHandlers\AddHotel\When_Handling_AddHotelCommand.cs" />
+    <Compile Include="CommandHandlers\With_CommandHandler.cs" />
+    <Compile Include="CommandHandlers\DeleteHotel\When_Handling_DeleteHotelCommand_With_Existing_Hotel.cs" />
+    <Compile Include="CommandHandlers\SetHotelFacts\When_Handling_SetHotelFactsCommand.cs" />
+    <Compile Include="CommandHandlers\SetHotelFacts\When_Handling_SetHotelFactsCommand_On_Nonexisting_Hotel.cs" />
+    <Compile Include="CommandHandlers\UpdateFactType\When_Handling_UpdateFactTypeCommand.cs" />
+    <Compile Include="CommandHandlers\UpdateHotel\When_Handling_UpdateHotelCommand.cs" />
+    <Compile Include="Infrastructure\When_Dispatching_A_Single_Message_With_Multiple_Handlers.cs" />
+    <Compile Include="Infrastructure\When_Dispatching_Multiple_Message_With_Only_One_Handler.cs" />
+    <Compile Include="Infrastructure\With_Dispatcher.cs" />
+    <Compile Include="Infrastructure\When_Dispatching_A_Single_Message_With_Only_One_Handler.cs" />
+    <Compile Include="Infrastructure\When_Getting_The_AggregateId_Of_A_Mapped_Identity.cs" />
+    <Compile Include="Infrastructure\When_Getting_The_ModelId_Of_A_Mapped_Identity.cs" />
+    <Compile Include="Infrastructure\When_Mapping_An_Identity.cs" />
     <Compile Include="With_Repository.cs" />
-    <Compile Include="When_Deleting_An_Existing_Hotel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="When_Adding_A_Hotel.cs" />
     <Compile Include="When_Getting_Hotel_By_Id.cs" />
-    <Compile Include="When_Setting_Hotel_Facts_On_Existing_Hotel.cs" />
-    <Compile Include="When_Setting_Hotel_Facts_On_Nonexisting_Hotel.cs" />
-    <Compile Include="When_Updating_An_Existing_Hotel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HotelAdmin.Domain\HotelAdmin.Domain.csproj">
       <Project>{E662BB8E-A8D5-48A9-B0C1-FC50042F41EE}</Project>
       <Name>HotelAdmin.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HotelAdmin.Messages\HotelAdmin.Messages.csproj">
+      <Project>{4C11F534-59A3-402B-902E-0A0C09461B6A}</Project>
+      <Name>HotelAdmin.Messages</Name>
     </ProjectReference>
     <ProjectReference Include="..\HotelAdmin.Service\HotelAdmin.Service.csproj">
       <Project>{8F9EEDFB-5751-4736-B03A-A8386F0F652C}</Project>
@@ -73,6 +87,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -14,7 +14,7 @@ namespace HotelAdmin.Service.Tests
 
         protected override void Given()
         {
-            _hotelService = new HotelService(ObjectContextFake, RepositoryFake, null);
+            _hotelService = new HotelService(RepositoryFake, null, null, null);
 
             A.CallTo(() => RepositoryFake.Get(null)).WithAnyArguments().Returns(
                 new Hotel() { Id = 42, Name = "Test Beach Resort", Description = "Nice hotel on the beach", Image = "http://test.com/test.jpg", Facts = new Collection<Fact>()});

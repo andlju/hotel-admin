@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Common.Logging">
+      <HintPath>..\packages\Common.Logging.2.0.0\lib\2.0\Common.Logging.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
@@ -42,13 +45,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FactModel.cs" />
+    <Compile Include="CommandHandlers\AddFactTypeCommandHandler.cs" />
+    <Compile Include="CommandHandlers\AddHotelCommandHandler.cs" />
+    <Compile Include="CommandHandlers\DeleteHotelCommandHandler.cs" />
+    <Compile Include="CommandHandlers\SetHotelFactsCommandHandler.cs" />
+    <Compile Include="CommandHandlers\UpdateFactTypeCommandHandler.cs" />
+    <Compile Include="CommandHandlers\UpdateHotelCommandHandler.cs" />
     <Compile Include="FactTypeModel.cs" />
     <Compile Include="FactTypeService.cs" />
     <Compile Include="HotelModel.cs" />
     <Compile Include="HotelService.cs" />
+    <Compile Include="IdentityMapper.cs" />
     <Compile Include="IFactTypeService.cs" />
     <Compile Include="IHotelService.cs" />
+    <Compile Include="IIdentityMapper.cs" />
+    <Compile Include="IMessageHandler.cs" />
+    <Compile Include="Infrastructure\IMessageDispatcher.cs" />
+    <Compile Include="Infrastructure\MessageDispatcher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -56,6 +69,13 @@
       <Project>{E662BB8E-A8D5-48A9-B0C1-FC50042F41EE}</Project>
       <Name>HotelAdmin.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\HotelAdmin.Messages\HotelAdmin.Messages.csproj">
+      <Project>{4C11F534-59A3-402B-902E-0A0C09461B6A}</Project>
+      <Name>HotelAdmin.Messages</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

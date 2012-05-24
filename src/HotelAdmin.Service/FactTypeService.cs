@@ -2,19 +2,23 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using HotelAdmin.Domain;
+using HotelAdmin.Messages.Commands;
+using HotelAdmin.Service.Infrastructure;
 using Petite;
 
 namespace HotelAdmin.Service
 {
     public class FactTypeService : IFactTypeService
     {
-        private readonly IObjectContext _objectContext;
         private readonly IFactTypeRepository _factTypeRepository;
+        private readonly IMessageDispatcher _messageDispatcher;
+        private readonly IIdentityMapper _identityMapper;
 
-        public FactTypeService(IObjectContext objectContext, IFactTypeRepository factTypeRepository)
+        public FactTypeService(IFactTypeRepository factTypeRepository, IMessageDispatcher messageDispatcher, IIdentityMapper identityMapper)
         {
-            _objectContext = objectContext;
             _factTypeRepository = factTypeRepository;
+            _messageDispatcher = messageDispatcher;
+            _identityMapper = identityMapper;
         }
 
         public IEnumerable<FactTypeModel> ListFactTypes()
@@ -48,23 +52,30 @@ namespace HotelAdmin.Service
 
         public int AddFactType(FactTypeModel factType)
         {
-            var ft = new FactType() {Code = factType.Code, Name = factType.Name};
-            _factTypeRepository.Add(ft);
-            _objectContext.SaveChanges();
+            var cmd = new AddFactTypeCommand()
+                          {
+                              FactTypeAggregateId = Guid.NewGuid(),
+                              Code = factType.Code, 
+                              Name = factType.Name
+                          };
+            _messageDispatcher.Dispatch(cmd);
 
-            return ft.Id;
+            var modelId = _identityMapper.GetModelId<FactType>(cmd.FactTypeAggregateId);
+
+            return (int)modelId;
         }
 
         public void UpdateFactType(FactTypeModel factType)
         {
-            var ft = _factTypeRepository.Get(f => f.Id == factType.Id);
-            if (ft == null)
-                throw new InvalidOperationException(string.Format("No FactType found with Id {0}", factType.Id));
+            var aggregateId = _identityMapper.GetAggregateId<FactType>(factType.Id);
 
-            ft.Name = factType.Name;
-            ft.Code = factType.Code;
-
-            _objectContext.SaveChanges();
+            var cmd = new UpdateFactTypeCommand()
+            {
+                FactTypeAggregateId = aggregateId,
+                Code = factType.Code,
+                Name = factType.Name
+            };
+            _messageDispatcher.Dispatch(cmd);
         }
     }
 }

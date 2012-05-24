@@ -53,6 +53,7 @@
     <Compile Include="FactTypeRepository.cs" />
     <Compile Include="HotelAdminContext.cs" />
     <Compile Include="HotelRepository.cs" />
+    <Compile Include="IdentityMapRepository.cs" />
     <Compile Include="Petite.Repository.Data.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

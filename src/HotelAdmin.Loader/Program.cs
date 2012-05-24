@@ -2,6 +2,8 @@
 using HotelAdmin.DataAccess;
 using HotelAdmin.Loader.TcneApi;
 using HotelAdmin.Service;
+using HotelAdmin.Service.CommandHandlers;
+using HotelAdmin.Service.Infrastructure;
 using Petite;
 
 namespace HotelAdmin.Loader
@@ -17,8 +19,21 @@ namespace HotelAdmin.Loader
             var factTypeRep = new FactTypeRepository(objContext);
             var historyRep = new DummyHistoryItemRepository();
 
-            FactTypeService factTypeService = new FactTypeService(objContext, factTypeRep);
-            HotelService hotelService = new HotelService(objContext, hotelRep, historyRep);
+            var idMapRep = new IdentityMapRepository(objContext);
+
+            var idMapper = new IdentityMapper(objContext, idMapRep);
+            
+            var messageDispatcher = new MessageDispatcher();
+            messageDispatcher.RegisterHandler(new AddHotelCommandHandler(objContext, hotelRep, idMapper));
+            messageDispatcher.RegisterHandler(new UpdateHotelCommandHandler(objContext, hotelRep, idMapper));
+            messageDispatcher.RegisterHandler(new SetHotelFactsCommandHandler(objContext, hotelRep, idMapper));
+            messageDispatcher.RegisterHandler(new DeleteHotelCommandHandler(objContext, hotelRep, idMapper));
+
+            messageDispatcher.RegisterHandler(new AddFactTypeCommandHandler(objContext, factTypeRep, idMapper));
+            messageDispatcher.RegisterHandler(new UpdateFactTypeCommandHandler(objContext, factTypeRep, idMapper));
+
+            FactTypeService factTypeService = new FactTypeService(factTypeRep, messageDispatcher, idMapper);
+            HotelService hotelService = new HotelService(hotelRep, historyRep, messageDispatcher, idMapper);
 
             if (args != null && args.Length > 0 && args[0] == "world")
             {
@@ -28,6 +43,7 @@ namespace HotelAdmin.Loader
                     if (!int.TryParse(args[1], out numberOfHotels))
                         numberOfHotels = 100; // Default to 100
                 }
+
                 WorldLoader.LoadWorld(hotelService, factTypeService, numberOfHotels);
                 return;
             }

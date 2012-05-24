@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{E662BB8E-A8D5-48A9-B0C1-FC50042F41EE}</ProjectGuid>
+    <ProjectGuid>{4C11F534-59A3-402B-902E-0A0C09461B6A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HotelAdmin.Domain</RootNamespace>
-    <AssemblyName>HotelAdmin.Domain</AssemblyName>
+    <RootNamespace>HotelAdmin.Messages</RootNamespace>
+    <AssemblyName>HotelAdmin.Messages</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -32,7 +32,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -41,21 +40,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Fact.cs" />
-    <Compile Include="FactType.cs" />
-    <Compile Include="HistoryItem.cs" />
-    <Compile Include="Hotel.cs" />
-    <Compile Include="IdentityMap.cs" />
-    <Compile Include="IFactTypeRepository.cs" />
-    <Compile Include="IHistoryItemRepository.cs" />
-    <Compile Include="IHotelRepository.cs" />
-    <Compile Include="IIdentityMapRepository.cs" />
-    <Compile Include="Petite.Repository.Domain.cs" />
+    <Compile Include="Commands\AddFactTypeCommand.cs" />
+    <Compile Include="Commands\AddHotelCommand.cs" />
+    <Compile Include="Commands\DeleteHotelCommand.cs" />
+    <Compile Include="Commands\ICommand.cs" />
+    <Compile Include="Commands\SetHotelFactsCommand.cs" />
+    <Compile Include="Commands\UpdateFactTypeCommand.cs" />
+    <Compile Include="Commands\UpdateHotelCommand.cs" />
+    <Compile Include="IMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

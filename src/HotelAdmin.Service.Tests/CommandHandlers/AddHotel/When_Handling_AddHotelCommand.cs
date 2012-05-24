@@ -1,28 +1,38 @@
-﻿using FakeItEasy;
+﻿using System;
+using FakeItEasy;
 using HotelAdmin.Domain;
+using HotelAdmin.Messages.Commands;
+using HotelAdmin.Service.CommandHandlers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace HotelAdmin.Service.Tests
+namespace HotelAdmin.Service.Tests.CommandHandlers.AddHotel
 {
     [TestClass]
-    public class When_Adding_A_Hotel : With_Repository<Hotel, IHotelRepository>
+    public class When_Handling_AddHotelCommand : With_CommandHandler<AddHotelCommand, Hotel, IHotelRepository>
     {
-        private const int HotelId = 42;
+        private readonly int _hotelId = 42;
+        private readonly Guid _hotelAggregatedId = Guid.NewGuid();
 
-        private HotelService _hotelService;
-        private int _returnValue;
-        
-        protected override void Given()
+        protected override IMessageHandler<AddHotelCommand> Given()
         {
-            _hotelService = new HotelService(ObjectContextFake, RepositoryFake, null);
-
             A.CallTo(() => RepositoryFake.Add(null)).WithAnyArguments().
-                Invokes(call => ((Hotel)call.Arguments[0]).Id = HotelId);
+                Invokes(call => ((Hotel)call.Arguments[0]).Id = _hotelId);
+
+            return new AddHotelCommandHandler(ObjectContextFake, RepositoryFake, IdentityMapperFake);
         }
 
-        protected override void When()
+        protected override AddHotelCommand When()
         {
-            _returnValue = _hotelService.AddHotel("Test Beach Hotel", "A nice hotel situated right at Test Beach", "Test Beach", "http://test.com/test.jpg", 0.0f, 0.0f);
+            return new AddHotelCommand()
+                       {
+                           HotelAggregateId = _hotelAggregatedId,
+                           Name = "Test Beach Hotel",
+                           Description =  "A nice hotel situated right at Test Beach",
+                           ResortName = "Test Beach",
+                           ImageUrl = "http://test.com/test.jpg",
+                           Latitude = 12.0f,
+                           Longitude = 32.4f
+                       };
         }
 
         [TestMethod]
@@ -32,9 +42,9 @@ namespace HotelAdmin.Service.Tests
         }
 
         [TestMethod]
-        public void Then_Returned_Id_Is_Correct()
+        public void Then_Aggregate_Id_Is_Mapped()
         {
-            Assert.AreEqual(HotelId, _returnValue);
+            A.CallTo(() => IdentityMapperFake.Map<Hotel>(_hotelId, _hotelAggregatedId)).MustHaveHappened();
         }
 
         [TestMethod]
@@ -60,6 +70,7 @@ namespace HotelAdmin.Service.Tests
         {
             A.CallTo(() => RepositoryFake.Add(null)).WhenArgumentsMatch(a => a.Get<Hotel>(0).Image == "http://test.com/test.jpg").MustHaveHappened(Repeated.Exactly.Once);
         }
+
 
     }
 }

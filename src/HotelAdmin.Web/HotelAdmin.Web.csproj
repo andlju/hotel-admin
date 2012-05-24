@@ -127,6 +127,10 @@
       <Project>{E662BB8E-A8D5-48A9-B0C1-FC50042F41EE}</Project>
       <Name>HotelAdmin.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\HotelAdmin.Messages\HotelAdmin.Messages.csproj">
+      <Project>{4C11F534-59A3-402B-902E-0A0C09461B6A}</Project>
+      <Name>HotelAdmin.Messages</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HotelAdmin.Service\HotelAdmin.Service.csproj">
       <Project>{8F9EEDFB-5751-4736-B03A-A8386F0F652C}</Project>
       <Name>HotelAdmin.Service</Name>

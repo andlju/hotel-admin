@@ -13,6 +13,8 @@ namespace HotelAdmin.DataAccess
         public IDbSet<FactType> FactTypes { get; set; }
         public IDbSet<HistoryItem> HistoryItems { get; set; } 
 
+        public IDbSet<IdentityMap> IdentityMaps { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Fact>().HasKey(f => new {f.HotelId, f.FactTypeId});

@@ -20,6 +20,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotelAdmin.Loader", "HotelAdmin.Loader\HotelAdmin.Loader.csproj", "{526059B5-C577-4A4B-AEFE-9230885F522F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotelAdmin.Messages", "HotelAdmin.Messages\HotelAdmin.Messages.csproj", "{4C11F534-59A3-402B-902E-0A0C09461B6A}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = HotelAdmin.vsmdi
@@ -93,6 +95,16 @@ Global
 		{526059B5-C577-4A4B-AEFE-9230885F522F}.Release|Mixed Platforms.Build.0 = Release|x86
 		{526059B5-C577-4A4B-AEFE-9230885F522F}.Release|x86.ActiveCfg = Release|x86
 		{526059B5-C577-4A4B-AEFE-9230885F522F}.Release|x86.Build.0 = Release|x86
+		{4C11F534-59A3-402B-902E-0A0C09461B6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C11F534-59A3-402B-902E-0A0C09461B6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C11F534-59A3-402B-902E-0A0C09461B6A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{4C11F534-59A3-402B-902E-0A0C09461B6A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{4C11F534-59A3-402B-902E-0A0C09461B6A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4C11F534-59A3-402B-902E-0A0C09461B6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C11F534-59A3-402B-902E-0A0C09461B6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C11F534-59A3-402B-902E-0A0C09461B6A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{4C11F534-59A3-402B-902E-0A0C09461B6A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{4C11F534-59A3-402B-902E-0A0C09461B6A}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

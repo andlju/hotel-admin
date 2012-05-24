@@ -93,7 +93,7 @@ namespace HotelAdmin.Loader.TcneApi
 
     public class WorldLoader
     {
-        
+
         static T Download<T>(string url)
         {
             var apiKey = ConfigurationManager.AppSettings["api-key"];

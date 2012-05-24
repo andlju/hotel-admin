@@ -2,22 +2,27 @@
 using System.Collections.Generic;
 using System.Linq;
 using HotelAdmin.Domain;
+using HotelAdmin.Messages.Commands;
+using HotelAdmin.Service.Infrastructure;
 using Petite;
 
 namespace HotelAdmin.Service
 {
     public class HotelService : IHotelService
     {
-        private readonly IObjectContext _objectContext;
         private readonly IHotelRepository _hotelRepository;
         private readonly IHistoryItemRepository _historyItemRepository;
 
+        private readonly IMessageDispatcher _messageDispatcher;
+        private readonly IIdentityMapper _identityMapper;
+
         private const int _PageSize = 15;
 
-        public HotelService(IObjectContext objectContext, IHotelRepository hotelRepository, IHistoryItemRepository historyItemRepository)
+        public HotelService(IHotelRepository hotelRepository, IHistoryItemRepository historyItemRepository, IMessageDispatcher messageDispatcher, IIdentityMapper identityMapper)
         {
-            _objectContext = objectContext;
             _hotelRepository = hotelRepository;
+            _messageDispatcher = messageDispatcher;
+            _identityMapper = identityMapper;
             _historyItemRepository = historyItemRepository;
         }
 
@@ -90,49 +95,58 @@ namespace HotelAdmin.Service
 
         public int AddHotel(string name, string description, string resortName, string image, double latitude, double longitude)
         {
-            var hotel = new Hotel() { Name = name, ResortName = resortName, Description = description, Image = image, Latitude = latitude, Longitude = longitude};
-            _hotelRepository.Add(hotel);
-            _objectContext.SaveChanges();
-            return hotel.Id;
+            var cmd = new AddHotelCommand()
+                          {
+                              HotelAggregateId = Guid.NewGuid(),
+                              Name = name,
+                              Description = description,
+                              ResortName = resortName,
+                              ImageUrl = image,
+                              Latitude = latitude,
+                              Longitude = longitude
+                          };
+            _messageDispatcher.Dispatch(cmd);
+            var modelId = (int)_identityMapper.GetModelId<Hotel>(cmd.HotelAggregateId);
+            return modelId;
         }
 
         public void UpdateHotel(int hotelId, string name, string description, string image)
         {
-            var hotel = _hotelRepository.Get(h => h.Id == hotelId);
-            if (hotel == null)
-                throw new InvalidOperationException(string.Format("No hotel found with id {0}", hotelId));
-
-            hotel.Name = name;
-            hotel.Description = description;
-            hotel.Image = image;
-
-            _objectContext.SaveChanges();
+            var aggregateId = _identityMapper.GetAggregateId<Hotel>(hotelId);
+            var cmd = new UpdateHotelCommand()
+            {
+                HotelAggregateId = aggregateId,
+                Name = name,
+                Description = description,
+                ImageUrl = image,
+            };
+            _messageDispatcher.Dispatch(cmd);
         }
 
         public void DeleteHotel(int hotelId)
         {
-            var hotel = _hotelRepository.Get(h => h.Id == hotelId);
-            if (hotel == null)
-                throw new InvalidOperationException(string.Format("No hotel found with id {0}", hotelId));
-       
-            _hotelRepository.Delete(hotel);
-
-            _objectContext.SaveChanges();
+            var aggregateId = _identityMapper.GetAggregateId<Hotel>(hotelId);
+            var cmd = new DeleteHotelCommand()
+            {
+                HotelAggregateId = aggregateId,
+            };
+            _messageDispatcher.Dispatch(cmd);
         }
 
         public void SetHotelFacts(int hotelId, IEnumerable<FactModel> facts)
         {
-            var hotel = _hotelRepository.Get(h => h.Id == hotelId);
-            if (hotel == null)
-                throw new InvalidOperationException(string.Format("No hotel found with id {0}", hotelId));
-
-            hotel.Facts.Clear();
-            foreach (var fact in facts)
+            var aggregateId = _identityMapper.GetAggregateId<Hotel>(hotelId);
+            var cmd = new SetHotelFactsCommand()
             {
-                hotel.Facts.Add(new Fact() { FactTypeId = fact.Id, Value = fact.Value, Details = fact.Details });
-            }
-
-            _objectContext.SaveChanges();
+                HotelAggregateId = aggregateId,
+                Facts = facts.Select(f => new SetHotelFactsCommand.Fact()
+                                              {
+                                                  FactTypeAggregateId = _identityMapper.GetAggregateId<FactType>(f.Id),
+                                                  Details = f.Details,
+                                                  Value = f.Value
+                                              }).ToArray()
+            };
+            _messageDispatcher.Dispatch(cmd);
         }
     }
 }
