@@ -1,6 +1,13 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1F654EB7-6614-4AA4-9FED-54674703FDDC}"
+	ProjectSection(SolutionItems) = preProject
+		HotelAdmin.vsmdi = HotelAdmin.vsmdi
+		Local.testsettings = Local.testsettings
+		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
+	EndProjectSection
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotelAdmin.Web", "HotelAdmin.Web\HotelAdmin.Web.csproj", "{B1263A98-C3AB-4118-B942-8941DDCF8689}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotelAdmin.Service", "HotelAdmin.Service\HotelAdmin.Service.csproj", "{8F9EEDFB-5751-4736-B03A-A8386F0F652C}"
@@ -11,14 +18,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotelAdmin.DataAccess", "Ho
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotelAdmin.Service.Tests", "HotelAdmin.Service.Tests\HotelAdmin.Service.Tests.csproj", "{9E9D564E-A814-478C-9408-1CD96D613FE4}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1F654EB7-6614-4AA4-9FED-54674703FDDC}"
-	ProjectSection(SolutionItems) = preProject
-		HotelAdmin.vsmdi = HotelAdmin.vsmdi
-		Local.testsettings = Local.testsettings
-		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotelAdmin.Loader", "HotelAdmin.Loader\HotelAdmin.Loader.csproj", "{526059B5-C577-4A4B-AEFE-9230885F522F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{9DA5BC89-36AC-4CAA-941B-2DDD25BBA9D2}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
